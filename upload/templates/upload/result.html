@@ -1,0 +1,166 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Result</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('container').appendChild(renderer.domElement);
+
+        const loader = new THREE.GLTFLoader();
+        loader.load("{{ model_file }}", function (gltf) {
+            scene.add(gltf.scene);
+            gltf.scene.scale.set(0.5, 0.5, 0.5); // Scale the model if necessary
+            camera.position.z = 5;
+
+            const animate = function () {
+                requestAnimationFrame(animate);
+                gltf.scene.rotation.y += 0.01; // Rotate the model for better view
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        }, undefined, function (error) {
+            console.error(error);
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D GLB Model Viewer</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+        #info { position: absolute; top: 10px; left: 10px; color: white; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div id="info"></div>
+    <button id="capture">Capture Image</button>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <script>
+        const info = document.getElementById('info');
+
+        function log(message) {
+            console.log(message);
+            info.innerHTML += message + '<br>';
+        }
+
+        let scene, camera, renderer, controls;
+
+        function init() {
+            log('Initializing scene...');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 1, 0);
+            scene.add(directionalLight);
+
+            camera.position.z = 5;
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+            log('Scene initialized.');
+        }
+
+        function loadModel() {
+            log('Loading GLB model...');
+            const loader = new THREE.GLTFLoader();
+            const modelPath = '{{ model_file }}';  // Use Django's template variable for model URL
+            log('Model Path:', modelPath);  // Log the model path for debugging
+
+            loader.load(
+                modelPath,
+                function (gltf) {
+                    log('Model loaded successfully.');
+                    scene.add(gltf.scene);
+                    
+                    const box = new THREE.Box3().setFromObject(gltf.scene);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    camera.position.set(center.x, center.y, center.z + maxDim * 2); // Adjust camera position
+                    controls.target.set(center.x, center.y, center.z);
+                    controls.update();
+
+                    log('Model positioned and camera adjusted.');
+                },
+                function (xhr) {
+                    log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('Error loading model:', error); // Log the entire error object
+                    log('Error loading model: ' + error.message);
+                }
+            );
+        }
+
+        document.getElementById('capture').addEventListener('click', function() {
+            const dataURL = renderer.toDataURL('image/png');
+            fetch('/upload/save-image/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token for security
+                },
+                body: JSON.stringify({ imageData: dataURL })
+            })
+            .then(response => response.json())
+            .then(data => {
+                log(data.status);
+            })
+            .catch(error => {
+                log('Error saving image: ' + error.message);
+            });
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        init();
+        loadModel();
+        animate();
+    </script>
+</body>
+</html>

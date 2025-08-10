@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Reconstruction from 2D - Transform Images to 3D</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            padding: 20px 0;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            margin-bottom: 30px;
+        }
+        .animate-character {
+            background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textclip 2s linear infinite;
+        }
+        @keyframes textclip {
+            to {
+                background-position: 200% center;
+            }
+        }
+        .btn-custom {
+            background: linear-gradient(to right, #11998e, #38ef7d);
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .icon-3d {
+            animation: icon3d 200ms 10;
+        }
+        @keyframes icon3d {
+            0% {
+                text-shadow: 5px 4px #f44336, -5px -6px #2196f3;
+            }
+            25% {
+                text-shadow: -5px -6px #f44336, 5px 4px #2196f3;
+            }
+            50% {
+                text-shadow: 5px -4px #f44336, -8px 4px #2196f3;
+            }
+            75% {
+                text-shadow: -8px -4px #f44336, -5px -4px #2196f3;
+            }
+            100% {
+                text-shadow: -5px 0 #f44336, 5px -4px #2196f3;
+            }
+        }
+        .model-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .model-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .model-info {
+            color: white;
+        }
+        .model-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .model-size {
+            font-size: 0.9em;
+            opacity: 0.8;
+            color: #e0e0e0;
+        }
+        .view-3d-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .view-3d-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        .no-models {
+            text-align: center;
+            color: white;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+        .section-title {
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="row justify-content-center">
+            <div class="col-md-10 glass-container text-center text-white">
+                <h1 class="display-4 fw-bold mb-4">Welcome to <span class="animate-character">3D Reconstruction from 2D</span></h1>
+                <p class="lead mb-5">Transform your 2D images into stunning 3D shapes with our cutting-edge AI technology.</p>
+                <div class="mb-5">
+                    <a href="{% url 'upload_image' %}" class="btn btn-custom btn-lg px-5 py-3 me-3">
+                        <i class="fas fa-upload me-2"></i> Start Generating
+                    </a>
+                    <a href="{% url 'gallery' %}" class="btn btn-lg px-5 py-3" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border: none; color: white; font-weight: bold; transition: all 0.3s ease;">
+                        <i class="fas fa-cube me-2"></i> View Gallery
+                    </a>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <i class="fas fa-magic fa-3x mb-3 icon-3d"></i>
+                        <h4>AI-Powered</h4>
+                        <p>Advanced algorithms for accurate 3D conversion</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-bolt fa-3x mb-3 icon-3d"></i>
+                        <h4>Fast Processing</h4>
+                        <p>Quick turnaround for your 3D models</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-cube fa-3x mb-3 icon-3d"></i>
+                        <h4>High Quality</h4>
+                        <p>Detailed and precise 3D renderings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Models Gallery Section -->
+        <div class="row justify-content-center">
+            <div class="col-md-12 glass-container">
+                <h2 class="section-title">
+                    <i class="fas fa-cube me-2"></i>Your Generated 3D Models
+                </h2>
+                
+                {% if models %}
+                    <div class="row">
+                        {% for model in models %}
+                        <div class="col-md-4 col-lg-3">
+                            <div class="model-card">
+                                {% if model.image_url %}
+                                    <img src="{{ model.image_url }}" alt="{{ model.name }}" class="model-thumbnail">
+                                {% else %}
+                                    <div class="model-thumbnail d-flex align-items-center justify-content-center" style="background: linear-gradient(45deg, #667eea, #764ba2);">
+                                        <i class="fas fa-cube fa-3x text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="model-info">
+                                    <div class="model-title">{{ model.name }}</div>
+                                    <div class="model-size">
+                                        <i class="fas fa-file me-1"></i>
+                                        {{ model.file_size|filesizeformat }}
+                                    </div>
+                                    <a href="{{ model.model_url }}" class="btn view-3d-btn w-100">
+                                        <i class="fas fa-eye me-2"></i>View 3D Model
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-models">
+                        <i class="fas fa-cube fa-3x mb-3"></i>
+                        <p>No 3D models generated yet. Upload an image to get started!</p>
+                        <a href="{% url 'upload_image' %}" class="btn btn-custom">
+                            <i class="fas fa-upload me-2"></i>Upload First Image
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

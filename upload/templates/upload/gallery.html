@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Models Gallery - 3D Reconstruction from 2D</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            padding: 20px 0;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            margin-bottom: 30px;
+        }
+        .gallery-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .gallery-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .model-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        .model-card:hover::before {
+            left: 100%;
+        }
+        .model-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .model-thumbnail {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .model-card:hover .model-thumbnail {
+            transform: scale(1.05);
+        }
+        .model-info {
+            color: white;
+        }
+        .model-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+            font-size: 1.2em;
+        }
+        .model-details {
+            font-size: 0.9em;
+            opacity: 0.8;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+        .view-3d-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .view-3d-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        .back-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+        .stats-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .no-models {
+            text-align: center;
+            color: white;
+            padding: 60px;
+            font-size: 1.3em;
+        }
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="row">
+            <div class="col-12">
+                <a href="{% url 'home' %}" class="back-btn">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Gallery Header -->
+        <div class="row justify-content-center">
+            <div class="col-md-12 glass-container">
+                <div class="gallery-header">
+                    <h1 class="gallery-title">
+                        <i class="fas fa-cube me-3"></i>3D Models Gallery
+                    </h1>
+                    <p class="lead">Explore all your generated 3D models</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-number">{{ models|length }}</div>
+                            <div class="stats-label">Total Models</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-number">
+                                {% if models %}
+                                    {{ models.0.id }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
+                            <div class="stats-label">Latest Model ID</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-number">
+                                {% if models %}
+                                    {{ models|length|add:"-1" }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
+                            <div class="stats-label">More to Generate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Models Grid -->
+                {% if models %}
+                    <div class="row">
+                        {% for model in models %}
+                        <div class="col-md-6 col-lg-4 fade-in">
+                            <div class="model-card">
+                                {% if model.image_url %}
+                                    <img src="{{ model.image_url }}" alt="{{ model.name }}" class="model-thumbnail">
+                                {% else %}
+                                    <div class="model-thumbnail d-flex align-items-center justify-content-center" style="background: linear-gradient(45deg, #667eea, #764ba2);">
+                                        <i class="fas fa-cube fa-4x text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="model-info">
+                                    <div class="model-title">
+                                        <i class="fas fa-image me-2"></i>{{ model.name }}
+                                    </div>
+                                    <div class="model-details">
+                                        <div><i class="fas fa-file me-1"></i>Size: {{ model.file_size|filesizeformat }}</div>
+                                        <div><i class="fas fa-hashtag me-1"></i>Model ID: {{ model.id }}</div>
+                                        {% if model.upload_date %}
+                                            <div><i class="fas fa-calendar me-1"></i>{{ model.upload_date|date:"M d, Y" }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ model.model_url }}" class="view-3d-btn">
+                                        <i class="fas fa-eye me-2"></i>View 3D Model
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-models">
+                        <i class="fas fa-cube fa-4x mb-4"></i>
+                        <h3>No 3D Models Yet</h3>
+                        <p>You haven't generated any 3D models yet. Start by uploading an image!</p>
+                        <a href="{% url 'upload_image' %}" class="btn view-3d-btn" style="width: auto; padding: 15px 30px;">
+                            <i class="fas fa-upload me-2"></i>Upload First Image
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Add loading animation with staggered delay
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html> 
