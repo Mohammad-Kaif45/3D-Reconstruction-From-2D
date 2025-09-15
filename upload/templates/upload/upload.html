@@ -8,106 +8,1083 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+
+
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --accent-hover: #2c5aa0;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
+            --bg-accent: #ebf8ff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
+        }
+
+
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+            min-height: calc(100vh - 80px);
             display: flex;
             align-items: center;
-            font-family: 'Arial', sans-serif;
         }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+
+        .upload-container {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
         }
-        .animate-character {
-            background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textclip 2s linear infinite;
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
         }
-        @keyframes textclip {
-            to {
-                background-position: 200% center;
-            }
+
+        .upload-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
         }
-        .btn-custom {
-            background: linear-gradient(to right, #11998e, #38ef7d);
-            border: none;
-            color: white;
-            font-weight: bold;
-            transition: all 0.3s ease;
+
+        .upload-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
-        .btn-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
         .form-control {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 10px;
-            padding: 15px;
-            color: white;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
         }
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: none;
+            outline: none;
+            border-color: var(--accent-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
         }
-        .custom-file-upload {
-            border: 2px dashed rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-            padding: 20px;
+
+        .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        /* File Upload Area */
+        .file-upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            background: var(--bg-accent);
+            margin-bottom: 1.5rem;
+            position: relative;
         }
-        .custom-file-upload:hover {
-            background: rgba(255, 255, 255, 0.1);
+
+        .file-upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(49, 130, 206, 0.05);
         }
-        .custom-file-upload i {
-            font-size: 48px;
-            margin-bottom: 10px;
+
+        .file-upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(49, 130, 206, 0.1);
+            transform: scale(1.02);
+        }
+
+        .file-upload-area.has-image {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-hint {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Image Preview and Annotation */
+        .image-preview-container {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .image-preview-container.show {
+            display: block;
+        }
+
+        .image-preview-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: var(--bg-secondary);
+        }
+
+        .annotation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            z-index: 10;
+        }
+
+        .annotation-tools {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            z-index: 20;
+        }
+
+        .annotation-tool {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .annotation-tool:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .annotation-tool.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .annotation-tool[title*="Clear"] {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .annotation-tool[title*="Clear"]:hover {
+            background: #c53030;
+        }
+
+        /* 3D Preview Section */
+        .preview-3d-section {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .preview-3d-section.show {
+            display: block;
+        }
+
+        .preview-3d-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .preview-3d-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .preview-3d-toggle {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preview-3d-toggle:hover {
+            background: var(--accent-hover);
+        }
+
+        .preview-3d-container {
+            background: white;
+            border-radius: 12px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .preview-3d-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .preview-3d-placeholder i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Image Quality Analysis */
+        .quality-analysis {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .quality-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .quality-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .quality-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quality-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .quality-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .quality-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quality-metric {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-accent);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .metric-status {
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-excellent {
+            background: #f0fff4;
+            color: var(--success-color);
+        }
+
+        .status-good {
+            background: #fffaf0;
+            color: var(--warning-color);
+        }
+
+        .status-poor {
+            background: #fed7d7;
+            color: var(--error-color);
+        }
+
+        /* Reconstruction Method Selection */
+        .reconstruction-methods {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .methods-header {
+            margin-bottom: 1rem;
+        }
+
+        .methods-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .methods-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .method-option {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .method-option:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .method-option.selected {
+            border-color: var(--accent-color);
+            background: var(--bg-accent);
+        }
+
+        .method-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .method-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .method-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+
+        .method-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .method-features li {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .method-features li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: inline-block;
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Progress Tracking */
+        .progress-section {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .progress-section.show {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .progress-status {
+            color: var(--accent-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar-container {
+            background: white;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: var(--accent-color);
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.completed .step-icon {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .progress-step.active .step-icon {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .progress-step.completed .step-label {
+            color: var(--accent-color);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .progress-details {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--bg-secondary);
+        }
+
+        .progress-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .progress-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn-progress {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-cancel:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-download {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #2d5a2d;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .upload-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .upload-title {
+                font-size: 2rem;
+            }
+            
+            .file-upload-area {
+                padding: 2rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 glass-container text-center text-white">
-                <h1 class="display-4 fw-bold mb-4">Upload Your <span class="animate-character">Image</span></h1>
-                <p class="lead mb-5">Transform your 2D image into a stunning 3D shape</p>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-cube me-2"></i>3D Reconstruction
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'upload_image' %}">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'gallery' %}">Gallery</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="upload-container">
+                <div class="upload-header">
+                    <h1 class="upload-title">Upload Your Image</h1>
+                    <p class="upload-subtitle">Transform your 2D image into a stunning 3D model with our advanced AI technology</p>
+                </div>
                 
-                <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
                     {% csrf_token %}
-                    <div class="mb-4">
-                        <label for="{{ form.image.id_for_label }}" class="custom-file-upload">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <div>Click or drag to upload your image</div>
-                        </label>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">Select Image</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="file-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="file-upload-text">Click or drag to upload your image</div>
+                            <div class="file-upload-hint">Supports JPG, PNG, GIF up to 10MB</div>
+                        </div>
                         {{ form.image }}
+                        <div id="fileInfo" class="mt-2" style="display: none;">
+                            <small class="text-success">
+                                <i class="fas fa-check-circle me-1"></i>
+                                <span id="fileName"></span> selected
+                            </small>
+                        </div>
                     </div>
+
                     {% for field in form %}
                         {% if field.name != 'image' %}
-                            <div class="mb-3">
-                                {{ field.label_tag }}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}
                                     <small class="form-text text-muted">{{ field.help_text }}</small>
                                 {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in field.errors %}
+                                            <small><i class="fas fa-exclamation-circle me-1"></i>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endif %}
                     {% endfor %}
-                    <button type="submit" class="btn btn-custom btn-lg px-5 py-3 mt-4">
-                        <i class="fas fa-magic me-2"></i> Transform to 3D
+
+                    <!-- Image Preview and Annotation -->
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <div class="image-preview-wrapper">
+                            <img id="imagePreview" class="image-preview" alt="Preview">
+                            <canvas id="annotationCanvas" class="annotation-canvas"></canvas>
+                            <div class="annotation-tools">
+                                <button class="annotation-tool" title="Draw Depth Lines" id="drawTool">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="annotation-tool" title="Add Depth Points" id="pointTool">
+                                    <i class="fas fa-circle"></i>
+                                </button>
+                                <button class="annotation-tool" title="Clear Annotations" id="clearTool">
+                                    <i class="fas fa-eraser"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Quality Analysis -->
+                    <div class="quality-analysis" id="qualityAnalysis" style="display: none;">
+                        <div class="quality-header">
+                            <div class="quality-title">
+                                <i class="fas fa-chart-line me-2"></i>Image Quality Analysis
+                            </div>
+                            <div class="quality-score">
+                                <span class="quality-number" id="qualityScore">0</span>
+                                <span class="quality-label">/ 100</span>
+                            </div>
+                        </div>
+                        <div class="quality-metrics">
+                            <div class="quality-metric">
+                                <div class="metric-value" id="resolutionMetric">0</div>
+                                <div class="metric-label">Resolution</div>
+                                <div class="metric-status status-excellent" id="resolutionStatus">Excellent</div>
+                            </div>
+                            <div class="quality-metric">
+                                <div class="metric-value" id="contrastMetric">0</div>
+                                <div class="metric-label">Contrast</div>
+                                <div class="metric-status status-excellent" id="contrastStatus">Excellent</div>
+                            </div>
+                            <div class="quality-metric">
+                                <div class="metric-value" id="lightingMetric">0</div>
+                                <div class="metric-label">Lighting</div>
+                                <div class="metric-status status-excellent" id="lightingMetric">Excellent</div>
+                            </div>
+                            <div class="quality-metric">
+                                <div class="metric-value" id="clarityMetric">0</div>
+                                <div class="metric-label">Clarity</div>
+                                <div class="metric-status status-excellent" id="clarityStatus">Excellent</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3D Preview Section -->
+                    <div class="preview-3d-section" id="preview3dSection">
+                        <div class="preview-3d-header">
+                            <div class="preview-3d-title">
+                                <i class="fas fa-cube me-2"></i>3D Preview
+                            </div>
+                            <button class="preview-3d-toggle" id="preview3dToggle">
+                                <i class="fas fa-eye me-2"></i>Show Preview
+                            </button>
+                        </div>
+                        <div class="preview-3d-container" id="preview3dContainer">
+                            <div class="preview-3d-placeholder">
+                                <i class="fas fa-cube"></i>
+                                <div>3D preview will appear here</div>
+                                <small>Click "Show Preview" to generate</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reconstruction Method Selection -->
+                    <div class="reconstruction-methods">
+                        <div class="methods-header">
+                            <div class="methods-title">
+                                <i class="fas fa-cogs me-2"></i>Reconstruction Method
+                            </div>
+                            <div class="methods-subtitle">Choose the algorithm that best suits your image type and quality requirements</div>
+                        </div>
+                        <div class="methods-grid">
+                            <label class="method-option" id="methodClassic">
+                                <input type="radio" name="reconstructionMethod" value="classic" checked>
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-cog"></i>
+                                    </div>
+                                    <div class="method-title">Classic Processing</div>
+                                </div>
+                                <div class="method-description">Traditional computer vision approach using depth estimation and stereo matching.</div>
+                                <ul class="method-features">
+                                    <li>Fast processing</li>
+                                    <li>Good for structured scenes</li>
+                                    <li>Lower computational cost</li>
+                                </ul>
+                            </label>
+                            <label class="method-option" id="methodDeep">
+                                <input type="radio" name="reconstructionMethod" value="deep">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div class="method-title">Deep Learning</div>
+                                </div>
+                                <div class="method-description">Advanced AI-powered reconstruction using neural networks for superior quality.</div>
+                                <ul class="method-features">
+                                    <li>Highest quality output</li>
+                                    <li>Better detail preservation</li>
+                                    <li>Handles complex scenes</li>
+                                </ul>
+                            </label>
+                            <label class="method-option" id="methodVoxel">
+                                <input type="radio" name="reconstructionMethod" value="voxel">
+                                <div class="method-header">
+                                    <div class="method-icon">
+                                        <i class="fas fa-cubes"></i>
+                                    </div>
+                                    <div class="method-title">Voxel Method</div>
+                                </div>
+                                <div class="method-description">Volume-based reconstruction ideal for organic shapes and complex geometries.</div>
+                                <ul class="method-features">
+                                    <li>Organic shape support</li>
+                                    <li>Consistent topology</li>
+                                    <li>Good for characters</li>
+                                </ul>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-submit" id="submitBtn">
+                        <span class="btn-text">
+                            <i class="fas fa-magic me-2"></i>Transform to 3D
+                        </span>
+                        <span class="loading">
+                            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Processing...
+                        </span>
                     </button>
                 </form>
+
+                <!-- Progress Tracking Section -->
+                <div class="progress-section" id="progressSection">
+                    <div class="progress-header">
+                        <div class="progress-title">
+                            <i class="fas fa-cube me-2"></i>3D Generation Progress
+                        </div>
+                        <div class="progress-status" id="progressStatus">Initializing...</div>
+                    </div>
+
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <div class="progress-steps">
+                        <div class="progress-step" id="step1">
+                            <div class="step-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <div class="step-label">Upload</div>
+                        </div>
+                        <div class="progress-step" id="step2">
+                            <div class="step-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="step-label">Processing</div>
+                        </div>
+                        <div class="progress-step" id="step3">
+                            <div class="step-icon">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div class="step-label">AI Generation</div>
+                        </div>
+                        <div class="progress-step" id="step4">
+                            <div class="step-icon">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <div class="step-label">3D Model</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-details">
+                        <div class="progress-detail-item">
+                            <span class="detail-label">Current Step:</span>
+                            <span class="detail-value" id="currentStep">Upload Complete</span>
+                        </div>
+                        <div class="progress-detail-item">
+                            <span class="detail-label">Time Elapsed:</span>
+                            <span class="detail-value" id="timeElapsed">00:00</span>
+                        </div>
+                        <div class="progress-detail-item">
+                            <span class="detail-label">Estimated Time:</span>
+                            <span class="detail-value" id="estimatedTime">2-3 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-actions">
+                        <button class="btn-progress btn-cancel" id="cancelBtn">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                        <button class="btn-progress btn-download" id="downloadBtn" style="display: none;">
+                            <i class="fas fa-download me-2"></i>Download 3D Model
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -115,13 +1092,476 @@
     <!-- Bootstrap 5 JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
     <script>
-        // JavaScript to update file input label with selected filename
-        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
-            var fileName = e.target.files[0].name;
-            var fileUploadLabel = document.querySelector('.custom-file-upload div');
-            fileUploadLabel.textContent = fileName;
+        // File upload handling
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const loading = submitBtn.querySelector('.loading');
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, preventDefaults, false);
         });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            fileUploadArea.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            fileUploadArea.classList.remove('dragover');
+        }
+
+        // Handle dropped files
+        fileUploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            updateFileInfo(files[0]);
+        }
+
+        // Handle file selection
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                updateFileInfo(e.target.files[0]);
+            }
+        });
+
+        function updateFileInfo(file) {
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'block';
+            fileUploadArea.querySelector('.file-upload-text').textContent = file.name;
+            fileUploadArea.querySelector('.file-upload-hint').textContent = 
+                `Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+        }
+
+        // Click to upload
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Progress tracking variables
+        let progressInterval;
+        let startTime;
+        let currentStep = 0;
+        const totalSteps = 4;
+
+        // Progress tracking functions
+        function startProgress() {
+            startTime = Date.now();
+            currentStep = 1;
+            updateProgress();
+            progressInterval = setInterval(updateProgress, 1000);
+        }
+
+        function updateProgress() {
+            const elapsed = Date.now() - startTime;
+            const elapsedSeconds = Math.floor(elapsed / 1000);
+            const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+            const elapsedDisplay = `${elapsedMinutes.toString().padStart(2, '0')}:${(elapsedSeconds % 60).toString().padStart(2, '0')}`;
+            
+            document.getElementById('timeElapsed').textContent = elapsedDisplay;
+            
+            // Simulate progress steps
+            if (elapsedSeconds > 30 && currentStep < 2) {
+                currentStep = 2;
+                updateStepDisplay();
+            } else if (elapsedSeconds > 90 && currentStep < 3) {
+                currentStep = 3;
+                updateStepDisplay();
+            } else if (elapsedSeconds > 150 && currentStep < 4) {
+                currentStep = 4;
+                updateStepDisplay();
+                completeProgress();
+            }
+        }
+
+        function updateStepDisplay() {
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (i < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (i === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('completed', 'active');
+                }
+            }
+            
+            // Update status and current step
+            const statuses = ['Upload Complete', 'Processing Image', 'AI Generation', '3D Model Ready'];
+            const steps = ['Upload Complete', 'Processing Image', 'AI Generation', '3D Model Ready'];
+            
+            document.getElementById('progressStatus').textContent = statuses[currentStep - 1];
+            document.getElementById('currentStep').textContent = steps[currentStep - 1];
+        }
+
+        function completeProgress() {
+            clearInterval(progressInterval);
+            document.getElementById('progressStatus').textContent = 'Complete!';
+            document.getElementById('estimatedTime').textContent = 'Ready';
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        function cancelProgress() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+            document.getElementById('progressSection').classList.remove('show');
+            btnText.style.display = 'inline-block';
+            loading.classList.remove('show');
+            submitBtn.disabled = false;
+        }
+
+        // Form submission
+        uploadForm.addEventListener('submit', function(e) {
+            if (fileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Please select an image file first.');
+                return;
+            }
+
+            // Show loading state
+            btnText.style.display = 'none';
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+            
+            // Show progress section and start tracking
+            setTimeout(() => {
+                document.getElementById('progressSection').classList.add('show');
+                startProgress();
+            }, 1000);
+        });
+
+        // Cancel button event
+        document.getElementById('cancelBtn').addEventListener('click', cancelProgress);
+
+        // Image Preview and Annotation functionality
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const annotationCanvas = document.getElementById('annotationCanvas');
+        const qualityAnalysis = document.getElementById('qualityAnalysis');
+        const preview3dSection = document.getElementById('preview3dSection');
+        const preview3dToggle = document.getElementById('preview3dToggle');
+        const preview3dContainer = document.getElementById('preview3dContainer');
+
+        // Annotation tools
+        const drawTool = document.getElementById('drawTool');
+        const pointTool = document.getElementById('pointTool');
+        const clearTool = document.getElementById('clearTool');
+
+        let isDrawing = false;
+        let currentTool = 'draw';
+        let annotations = [];
+
+        // Canvas setup
+        const ctx = annotationCanvas.getContext('2d');
+        annotationCanvas.width = 400;
+        annotationCanvas.height = 300;
+
+        // File input change handler
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.classList.add('show');
+                    qualityAnalysis.style.display = 'block';
+                    preview3dSection.classList.add('show');
+                    
+                    // Analyze image quality
+                    analyzeImageQuality(e.target.result);
+                    
+                    // Update file info
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileInfo').style.display = 'block';
+                    
+                    // Update upload area
+                    fileUploadArea.classList.add('has-image');
+                    fileUploadArea.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="${e.target.result}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary-color);">${file.name}</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem;">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                            </div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Image quality analysis
+        function analyzeImageQuality(imageSrc) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                // Calculate metrics
+                const resolution = Math.min(100, (img.width * img.height) / 10000);
+                const contrast = calculateContrast(data);
+                const lighting = calculateLighting(data);
+                const clarity = calculateClarity(data);
+                
+                // Update UI
+                document.getElementById('resolutionMetric').textContent = Math.round(resolution);
+                document.getElementById('contrastMetric').textContent = Math.round(contrast);
+                document.getElementById('lightingMetric').textContent = Math.round(lighting);
+                document.getElementById('clarityMetric').textContent = Math.round(clarity);
+                
+                // Calculate overall score
+                const overallScore = Math.round((resolution + contrast + lighting + clarity) / 4);
+                document.getElementById('qualityScore').textContent = overallScore;
+                
+                // Update status indicators
+                updateMetricStatus('resolutionStatus', resolution);
+                updateMetricStatus('contrastStatus', contrast);
+                updateMetricStatus('lightingMetric', lighting);
+                updateMetricStatus('clarityStatus', clarity);
+            };
+            img.src = imageSrc;
+        }
+
+        function calculateContrast(data) {
+            let sum = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const brightness = (r + g + b) / 3;
+                sum += brightness;
+            }
+            const avgBrightness = sum / (data.length / 4);
+            
+            let variance = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const brightness = (r + g + b) / 3;
+                variance += Math.pow(brightness - avgBrightness, 2);
+            }
+            variance /= (data.length / 4);
+            
+            return Math.min(100, Math.sqrt(variance) * 2);
+        }
+
+        function calculateLighting(data) {
+            let sum = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const brightness = (r + g + b) / 3;
+                sum += brightness;
+            }
+            const avgBrightness = sum / (data.length / 4);
+            
+            // Optimal brightness is around 128
+            const optimalBrightness = 128;
+            const deviation = Math.abs(avgBrightness - optimalBrightness);
+            return Math.max(0, 100 - (deviation / 2.56));
+        }
+
+        function calculateClarity(data) {
+            let edgeSum = 0;
+            for (let i = 0; i < data.length - 4; i += 4) {
+                const r1 = data[i];
+                const g1 = data[i + 1];
+                const b1 = data[i + 2];
+                const brightness1 = (r1 + g1 + b1) / 3;
+                
+                const r2 = data[i + 4];
+                const g2 = data[i + 4 + 1];
+                const b2 = data[i + 4 + 2];
+                const brightness2 = (r2 + g2 + b2) / 3;
+                
+                edgeSum += Math.abs(brightness1 - brightness2);
+            }
+            
+            const avgEdge = edgeSum / (data.length / 4);
+            return Math.min(100, avgEdge / 2.56);
+        }
+
+        function updateMetricStatus(elementId, value) {
+            const element = document.getElementById(elementId);
+            element.className = 'metric-status';
+            
+            if (value >= 80) {
+                element.classList.add('status-excellent');
+                element.textContent = 'Excellent';
+            } else if (value >= 60) {
+                element.classList.add('status-good');
+                element.textContent = 'Good';
+            } else {
+                element.classList.add('status-poor');
+                element.textContent = 'Poor';
+            }
+        }
+
+        // Annotation functionality
+        drawTool.addEventListener('click', () => {
+            currentTool = 'draw';
+            updateToolStates();
+        });
+
+        pointTool.addEventListener('click', () => {
+            currentTool = 'point';
+            updateToolStates();
+        });
+
+        clearTool.addEventListener('click', () => {
+            ctx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+            annotations = [];
+        });
+
+        function updateToolStates() {
+            [drawTool, pointTool].forEach(tool => {
+                tool.classList.remove('active');
+            });
+            
+            if (currentTool === 'draw') {
+                drawTool.classList.add('active');
+            } else if (currentTool === 'point') {
+                pointTool.classList.add('active');
+            }
+        }
+
+        // Canvas drawing events
+        annotationCanvas.addEventListener('mousedown', startDrawing);
+        annotationCanvas.addEventListener('mousemove', draw);
+        annotationCanvas.addEventListener('mouseup', stopDrawing);
+        annotationCanvas.addEventListener('mouseout', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = annotationCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (currentTool === 'draw') {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = annotationCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (currentTool === 'draw') {
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = '#3182ce';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            } else if (currentTool === 'point') {
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                ctx.fillStyle = '#e53e3e';
+                ctx.fill();
+            }
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // 3D Preview functionality
+        preview3dToggle.addEventListener('click', function() {
+            if (preview3dContainer.querySelector('.preview-3d-placeholder')) {
+                // Generate 3D preview
+                generate3DPreview();
+            } else {
+                // Toggle preview
+                preview3dContainer.style.display = preview3dContainer.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+
+        function generate3DPreview() {
+            preview3dContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div style="margin-top: 1rem; color: var(--text-secondary);">
+                        Generating 3D preview...
+                    </div>
+                </div>
+            `;
+            
+            // Simulate 3D preview generation
+            setTimeout(() => {
+                preview3dContainer.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-cube" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
+                        <div style="color: var(--text-primary); font-weight: 600; margin-bottom: 0.5rem;">
+                            3D Preview Generated
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Preview shows basic 3D structure<br>
+                            Full reconstruction will be available after processing
+                        </div>
+                    </div>
+                `;
+                preview3dToggle.innerHTML = '<i class="fas fa-eye-slash me-2"></i>Hide Preview';
+            }, 3000);
+        }
+
+        // Method selection
+        const methodOptions = document.querySelectorAll('.method-option');
+        methodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                methodOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Update form data
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+            });
+        });
+
+        // Initialize first method as selected
+        document.getElementById('methodClassic').classList.add('selected');
     </script>
 </body>
 </html>

@@ -4,85 +4,396 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Conversion - 3D Reconstruction from 2D</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --accent-hover: #2c5aa0;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
+            --bg-accent: #ebf8ff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            font-family: 'Arial', sans-serif;
+            padding: 2rem 0;
         }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .animate-character {
-            background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textclip 2s linear infinite;
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
         }
-        @keyframes textclip {
-            to {
-                background-position: 200% center;
-            }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin: 0 0.5rem;
         }
-        .btn-custom {
-            background: linear-gradient(to right, #11998e, #38ef7d);
-            border: none;
-            color: white;
-            font-weight: bold;
-            transition: all 0.3s ease;
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
         }
-        .btn-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
         }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Confirmation Container */
+        .confirm-container {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            max-width: 700px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Header Section */
+        .confirm-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .confirm-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .confirm-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
         .uploaded-image {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
-        }
-        .upload-another {
-            color: #fff;
-            text-decoration: none;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 3px solid var(--border-color);
             transition: all 0.3s ease;
         }
-        .upload-another:hover {
-            color: #38ef7d;
-            text-shadow: 0 0 10px rgba(56, 239, 125, 0.5);
+
+        .uploaded-image:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-color);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(49, 130, 206, 0.1) 0%, rgba(44, 90, 160, 0.1) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .overlay-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+        }
+
+        /* Action Buttons */
+        .confirm-actions {
+            margin-bottom: 2rem;
+        }
+
+        .btn-convert {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 1.25rem 2.5rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-convert:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+        }
+
+        .btn-convert:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-convert i {
+            font-size: 1.4rem;
+        }
+
+        /* Secondary Actions */
+        .secondary-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        /* Progress Indicator */
+        .progress-info {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .progress-steps li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-steps li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .progress-steps li:first-child::before {
+            content: '1';
+            color: var(--accent-color);
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0;
+            }
+            
+            .confirm-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .confirm-title {
+                font-size: 2rem;
+            }
+            
+            .btn-convert {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .secondary-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 glass-container text-center text-white">
-                <h1 class="display-4 fw-bold mb-4">Confirm <span class="animate-character">Conversion</span></h1>
-                <p class="lead mb-5">Your image has been uploaded successfully. Are you ready to transform it into 3D?</p>
-                
-                <img src="{{ image.image.url }}" alt="Uploaded Image" class="uploaded-image">
-                
-                <form method="post" action="{% url 'confirm_conversion' image.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-custom btn-lg px-5 py-3 mb-4">
-                        <i class="fas fa-cube me-2"></i> Convert to 3D
-                    </button>
-                </form>
-                
-                <a href="{% url 'upload_image' %}" class="upload-another">
-                    <i class="fas fa-arrow-left me-2"></i> Upload another image
-                </a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-cube me-2"></i>3D Reconstruction
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'upload_image' %}">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'gallery' %}">Gallery</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="confirm-container">
+                <!-- Header Section -->
+                <div class="confirm-header">
+                    <h1 class="confirm-title">
+                        <i class="fas fa-check-circle me-2"></i>Confirm Conversion
+                    </h1>
+                    <p class="confirm-subtitle">
+                        Your image has been uploaded successfully! Review it below and confirm to start the 3D reconstruction process.
+                    </p>
+                </div>
+
+                <!-- Image Preview -->
+                <div class="image-preview">
+                    <img src="{{ image.image.url }}" alt="Uploaded Image" class="uploaded-image">
+                    <div class="image-overlay">
+                        <i class="fas fa-eye overlay-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="confirm-actions">
+                    <form method="post" action="{% url 'confirm_conversion' image.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-convert">
+                            <i class="fas fa-cube"></i>Convert to 3D Model
+                        </button>
+                    </form>
+                    
+                    <div class="secondary-actions">
+                        <a href="{% url 'upload_image' %}" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i>Upload Another Image
+                        </a>
+                        <a href="{% url 'gallery' %}" class="btn-secondary">
+                            <i class="fas fa-images"></i>View Gallery
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Progress Information -->
+                <div class="progress-info">
+                    <div class="progress-title">
+                        <i class="fas fa-info-circle"></i>What happens next?
+                    </div>
+                    <ul class="progress-steps">
+                        <li>Image analysis and preprocessing</li>
+                        <li>AI-powered 3D reconstruction</li>
+                        <li>Model optimization and refinement</li>
+                        <li>3D model generation and download</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

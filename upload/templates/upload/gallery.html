@@ -8,46 +8,163 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --accent-hover: #2c5aa0;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
+            --bg-accent: #ebf8ff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            font-family: 'Arial', sans-serif;
-            padding: 20px 0;
         }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Gallery Header */
         .gallery-header {
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-        .gallery-title {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .model-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
             border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .gallery-title-section {
+            margin-bottom: 2rem;
+        }
+
+        .gallery-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .gallery-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gallery-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg-accent);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            margin-bottom: 3rem;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
             transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-color);
+            height: 100%;
             position: relative;
             overflow: hidden;
         }
+
         .model-card::before {
             content: '';
             position: absolute;
@@ -55,199 +172,942 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(49, 130, 206, 0.05), transparent);
             transition: left 0.5s;
         }
+
         .model-card:hover::before {
             left: 100%;
         }
+
         .model-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-color);
         }
+
         .model-thumbnail {
             width: 100%;
             height: 250px;
             object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
             transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
         }
+
         .model-card:hover .model-thumbnail {
             transform: scale(1.05);
+            border-color: var(--accent-color);
         }
+
         .model-info {
-            color: white;
+            color: var(--text-primary);
         }
+
         .model-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: white;
-            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            line-height: 1.4;
         }
+
         .model-details {
-            font-size: 0.9em;
-            opacity: 0.8;
-            color: #e0e0e0;
-            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
+
+        .model-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .model-detail-item i {
+            color: var(--accent-color);
+            width: 16px;
+        }
+
         .view-3d-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
             border: none;
             color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: bold;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
             transition: all 0.3s ease;
             width: 100%;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            font-size: 1rem;
         }
+
         .view-3d-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
             color: white;
-            text-decoration: none;
         }
-        .back-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+
+        /* Empty State */
+        .empty-gallery {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .empty-gallery i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-gallery h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .empty-gallery p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
             border: none;
             color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-weight: bold;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
         }
-        .back-btn:hover {
+
+        .btn-upload:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
             color: white;
-            text-decoration: none;
         }
-        .stats-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
+
+        /* Filters and Search */
+        .filters-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .filter-input {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .btn-filter {
+            background: var(--accent-color);
+            border: none;
             color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-filter:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        /* Advanced Filters */
+        .advanced-filters {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .filter-tag {
+            background: var(--bg-accent);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-tag .remove-tag {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .filter-tag .remove-tag:hover {
+            opacity: 1;
+        }
+
+        /* Search Results Info */
+        .search-info {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-results {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .search-query {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* Batch Processing */
+        .batch-processing {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .batch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .batch-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-batch {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-batch:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-batch.secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-batch.secondary:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .batch-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
             text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        .stats-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #4ecdc4;
+
+        .batch-upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(49, 130, 206, 0.05);
         }
-        .stats-label {
-            font-size: 1.1em;
-            opacity: 0.9;
+
+        .batch-upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(49, 130, 206, 0.1);
         }
-        .no-models {
-            text-align: center;
+
+        .batch-upload-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .batch-upload-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .batch-upload-hint {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .batch-files {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .batch-file-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .batch-file-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .batch-file-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+
+        .batch-file-size {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .batch-file-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fffaf0;
+            color: var(--warning-color);
+        }
+
+        .status-processing {
+            background: #eff6ff;
+            color: var(--accent-color);
+        }
+
+        .status-completed {
+            background: #f0fff4;
+            color: var(--success-color);
+        }
+
+        .batch-file-remove {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--error-color);
             color: white;
-            padding: 60px;
-            font-size: 1.3em;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
         }
-        .loading-spinner {
+
+        /* Comparison Mode */
+        .comparison-mode {
+            background: var(--bg-accent);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
             display: none;
+        }
+
+        .comparison-mode.show {
+            display: block;
+        }
+
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .comparison-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
-            color: white;
-            padding: 40px;
         }
-        .fade-in {
-            animation: fadeIn 0.6s ease-in;
+
+        .comparison-item-header {
+            margin-bottom: 1rem;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .comparison-item-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-item-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .comparison-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-item-3d {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-item-3d i {
+            font-size: 3rem;
+            color: var(--accent-color);
+        }
+
+        .comparison-item-details {
+            text-align: left;
+        }
+
+        .comparison-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--bg-secondary);
+        }
+
+        .comparison-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-detail-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .comparison-detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .comparison-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Model Selection for Comparison */
+        .model-selection {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .selection-header {
+            margin-bottom: 1rem;
+        }
+
+        .selection-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .selection-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .selection-item {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .selection-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .selection-item.selected {
+            border-color: var(--accent-color);
+            background: var(--bg-accent);
+        }
+
+        .selection-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .selection-item-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            word-break: break-word;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .gallery-title {
+                font-size: 2.5rem;
+            }
+            
+            .gallery-header {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .stats-container {
+                gap: 1rem;
+            }
+            
+            .stat-item {
+                padding: 0.75rem 1rem;
+            }
+            
+            .filters-section {
+                padding: 1.5rem;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="row">
-            <div class="col-12">
-                <a href="{% url 'home' %}" class="back-btn">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Home
-                </a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-cube me-2"></i>3D Reconstruction
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_image' %}">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'gallery' %}">Gallery</a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
 
-        <!-- Gallery Header -->
-        <div class="row justify-content-center">
-            <div class="col-md-12 glass-container">
-                <div class="gallery-header">
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Gallery Header -->
+            <div class="gallery-header">
+                <div class="gallery-title-section">
                     <h1 class="gallery-title">
-                        <i class="fas fa-cube me-3"></i>3D Models Gallery
+                        <i class="fas fa-cube me-2"></i>3D Models Gallery
                     </h1>
-                    <p class="lead">Explore all your generated 3D models</p>
+                    <p class="gallery-subtitle">Explore your collection of AI-generated 3D models and discover the power of 2D to 3D reconstruction</p>
                 </div>
-
-                <!-- Stats -->
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="stats-card">
-                            <div class="stats-number">{{ models|length }}</div>
-                            <div class="stats-label">Total Models</div>
-                        </div>
+                
+                <div class="gallery-actions">
+                    <button class="btn-batch secondary" id="enterComparisonBtn">
+                        <i class="fas fa-balance-scale me-2"></i>Compare Models
+                    </button>
+                    <a href="{% url 'upload_image' %}" class="btn-batch">
+                        <i class="fas fa-plus me-2"></i>Upload More
+                    </a>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ models|length }}</span>
+                        <span class="stat-label">Total Models</span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="stats-card">
-                            <div class="stats-number">
-                                {% if models %}
-                                    {{ models.0.id }}
-                                {% else %}
-                                    0
-                                {% endif %}
-                            </div>
-                            <div class="stats-label">Latest Model ID</div>
-                        </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ models|length }}</span>
+                        <span class="stat-label">This Session</span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="stats-card">
-                            <div class="stats-number">
-                                {% if models %}
-                                    {{ models|length|add:"-1" }}
-                                {% else %}
-                                    0
-                                {% endif %}
-                            </div>
-                            <div class="stats-label">More to Generate</div>
-                        </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Success Rate</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Models Grid -->
-                {% if models %}
-                    <div class="row">
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Search Models</label>
+                        <input type="text" class="filter-input" id="searchInput" placeholder="Search by name, type, or description...">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Sort By</label>
+                        <select class="filter-input" id="sortSelect">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="name">Name A-Z</option>
+                            <option value="size">File Size</option>
+                            <option value="popularity">Most Popular</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">File Size</label>
+                        <select class="filter-input" id="sizeFilter">
+                            <option value="">All Sizes</option>
+                            <option value="small">Small (< 1MB)</option>
+                            <option value="medium">Medium (1-5MB)</option>
+                            <option value="large">Large (> 5MB)</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-filter" id="applyFilters">Apply</button>
+                        <button class="btn-clear" id="clearFilters">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="advanced-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Date Range</label>
+                            <input type="date" class="filter-input" id="startDate">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">To</label>
+                            <input type="date" class="filter-input" id="endDate">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Model Type</label>
+                            <select class="filter-input" id="typeFilter">
+                                <option value="">All Types</option>
+                                <option value="object">Objects</option>
+                                <option value="character">Characters</option>
+                                <option value="landscape">Landscapes</option>
+                                <option value="architecture">Architecture</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-tags" id="activeFilters"></div>
+                </div>
+            </div>
+
+            <!-- Search Results Info -->
+            <div class="search-info" id="searchInfo" style="display: none;">
+                <div class="search-results">
+                    Showing <span id="resultCount">0</span> results
+                    <span id="searchQuery" class="search-query"></span>
+                </div>
+                <button class="btn-clear" id="clearSearch">Clear Search</button>
+            </div>
+
+            <!-- Batch Processing Section -->
+            <div class="batch-processing">
+                <div class="batch-header">
+                    <div class="batch-title">
+                        <i class="fas fa-layer-group me-2"></i>Batch Processing
+                    </div>
+                    <div class="batch-actions">
+                        <button class="btn-batch" id="startBatchBtn">
+                            <i class="fas fa-play me-2"></i>Start Processing
+                        </button>
+                        <button class="btn-batch secondary" id="clearBatchBtn">
+                            <i class="fas fa-trash me-2"></i>Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="batch-upload-area" id="batchUploadArea">
+                    <div class="batch-upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="batch-upload-text">Drag & drop multiple images here or click to select</div>
+                    <div class="batch-upload-hint">Supports up to 10 images simultaneously</div>
+                </div>
+                
+                <div class="batch-files" id="batchFiles"></div>
+            </div>
+
+            <!-- Comparison Mode Section -->
+            <div class="comparison-mode" id="comparisonMode">
+                <div class="comparison-header">
+                    <div class="comparison-title">
+                        <i class="fas fa-balance-scale me-2"></i>Model Comparison
+                    </div>
+                    <div class="comparison-controls">
+                        <button class="btn-batch secondary" id="exitComparisonBtn">
+                            <i class="fas fa-times me-2"></i>Exit Comparison
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="model-selection" id="modelSelection">
+                    <div class="selection-header">
+                        <div class="selection-title">Select Models to Compare</div>
+                        <div class="selection-subtitle">Choose two models from your gallery to compare side by side</div>
+                    </div>
+                    <div class="selection-grid" id="selectionGrid"></div>
+                </div>
+                
+                <div class="comparison-grid" id="comparisonGrid" style="display: none;">
+                    <div class="comparison-item" id="comparisonItem1">
+                        <div class="comparison-item-header">
+                            <div class="comparison-item-title" id="comparisonTitle1">Model 1</div>
+                            <div class="comparison-item-subtitle" id="comparisonSubtitle1">Select a model</div>
+                        </div>
+                        <div class="comparison-item-image" id="comparisonImage1">
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-light);">
+                                <i class="fas fa-image" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                        <div class="comparison-item-3d" id="comparison3d1">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="comparison-item-details" id="comparisonDetails1">
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">File Size:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">Vertices:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">Created:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item" id="comparisonItem2">
+                        <div class="comparison-item-header">
+                            <div class="comparison-item-title" id="comparisonTitle2">Model 2</div>
+                            <div class="comparison-item-subtitle" id="comparisonSubtitle2">Select a model</div>
+                        </div>
+                        <div class="comparison-item-image" id="comparisonImage2">
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-light);">
+                                <i class="fas fa-image" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                        <div class="comparison-item-3d" id="comparison3d2">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="comparison-item-details" id="comparisonDetails2">
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">File Size:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">Vertices:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                            <div class="comparison-detail-item">
+                                <span class="comparison-detail-label">Created:</span>
+                                <span class="comparison-detail-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-actions" id="comparisonActions" style="display: none;">
+                    <button class="btn-batch" id="compareModelsBtn">
+                        <i class="fas fa-balance-scale me-2"></i>Compare Models
+                    </button>
+                    <button class="btn-batch secondary" id="exportComparisonBtn">
+                        <i class="fas fa-download me-2"></i>Export Comparison
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gallery Grid -->
+            {% if models %}
+                <div class="gallery-grid">
+                    <div class="row g-4">
                         {% for model in models %}
-                        <div class="col-md-6 col-lg-4 fade-in">
+                        <div class="col-md-6 col-lg-4 model-item" data-name="{{ model.name|lower }}">
                             <div class="model-card">
                                 {% if model.image_url %}
                                     <img src="{{ model.image_url }}" alt="{{ model.name }}" class="model-thumbnail">
                                 {% else %}
-                                    <div class="model-thumbnail d-flex align-items-center justify-content-center" style="background: linear-gradient(45deg, #667eea, #764ba2);">
-                                        <i class="fas fa-cube fa-4x text-white"></i>
+                                    <div class="model-thumbnail d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));">
+                                        <i class="fas fa-cube fa-3x text-white"></i>
                                     </div>
                                 {% endif %}
                                 <div class="model-info">
-                                    <div class="model-title">
-                                        <i class="fas fa-image me-2"></i>{{ model.name }}
-                                    </div>
+                                    <h3 class="model-title">{{ model.name }}</h3>
                                     <div class="model-details">
-                                        <div><i class="fas fa-file me-1"></i>Size: {{ model.file_size|filesizeformat }}</div>
-                                        <div><i class="fas fa-hashtag me-1"></i>Model ID: {{ model.id }}</div>
-                                        {% if model.upload_date %}
-                                            <div><i class="fas fa-calendar me-1"></i>{{ model.upload_date|date:"M d, Y" }}</div>
-                                        {% endif %}
+                                        <div class="model-detail-item">
+                                            <i class="fas fa-file"></i>
+                                            <span>{{ model.file_size|filesizeformat }}</span>
+                                        </div>
+                                        <div class="model-detail-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>{{ model.created_at|date:"M d, Y" }}</span>
+                                        </div>
+                                        <div class="model-detail-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>{{ model.created_at|date:"H:i" }}</span>
+                                        </div>
                                     </div>
-                                    <a href="{{ model.model_url }}" class="view-3d-btn">
+                                    <a href="{{ model.model_url }}" class="btn view-3d-btn">
                                         <i class="fas fa-eye me-2"></i>View 3D Model
                                     </a>
                                 </div>
@@ -255,17 +1115,17 @@
                         </div>
                         {% endfor %}
                     </div>
-                {% else %}
-                    <div class="no-models">
-                        <i class="fas fa-cube fa-4x mb-4"></i>
-                        <h3>No 3D Models Yet</h3>
-                        <p>You haven't generated any 3D models yet. Start by uploading an image!</p>
-                        <a href="{% url 'upload_image' %}" class="btn view-3d-btn" style="width: auto; padding: 15px 30px;">
-                            <i class="fas fa-upload me-2"></i>Upload First Image
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
+                </div>
+            {% else %}
+                <div class="empty-gallery">
+                    <i class="fas fa-cube"></i>
+                    <h3>No 3D Models Generated Yet</h3>
+                    <p>Start your 3D reconstruction journey by uploading your first image and watch the magic happen!</p>
+                    <a href="{% url 'upload_image' %}" class="btn btn-upload">
+                        <i class="fas fa-upload me-2"></i>Upload First Image
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -274,12 +1134,483 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     
     <script>
-        // Add loading animation with staggered delay
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.fade-in');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
+        // Advanced search and filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const sizeFilter = document.getElementById('sizeFilter');
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+        const typeFilter = document.getElementById('typeFilter');
+        const applyFilters = document.getElementById('applyFilters');
+        const clearFilters = document.getElementById('clearFilters');
+        const clearSearch = document.getElementById('clearSearch');
+        const searchInfo = document.getElementById('searchInfo');
+        const resultCount = document.getElementById('resultCount');
+        const searchQuery = document.getElementById('searchQuery');
+        const activeFilters = document.getElementById('activeFilters');
+        
+        const modelItems = document.querySelectorAll('.model-item');
+        let activeFiltersList = [];
+
+        // Initialize filters
+        function initFilters() {
+            // Set default dates (last 30 days)
+            const today = new Date();
+            const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+            startDate.value = thirtyDaysAgo.toISOString().split('T')[0];
+            endDate.value = today.toISOString().split('T')[0];
+        }
+
+        // Apply all filters
+        function applyAllFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const sortBy = sortSelect.value;
+            const sizeFilterValue = sizeFilter.value;
+            const startDateValue = startDate.value;
+            const endDateValue = endDate.value;
+            const typeFilterValue = typeFilter.value;
+
+            let visibleCount = 0;
+            activeFiltersList = [];
+
+            modelItems.forEach(item => {
+                let shouldShow = true;
+                const modelName = item.querySelector('.model-title').textContent.toLowerCase();
+                const modelSize = item.querySelector('.model-size').textContent;
+                const modelDate = item.querySelector('.model-details .model-detail-item:nth-child(2) span').textContent;
+
+                // Search filter
+                if (searchTerm && !modelName.includes(searchTerm)) {
+                    shouldShow = false;
+                }
+
+                // Size filter
+                if (sizeFilterValue) {
+                    const sizeInMB = parseFloat(modelSize.match(/(\d+\.?\d*)/)[1]);
+                    if (sizeFilterValue === 'small' && sizeInMB >= 1) shouldShow = false;
+                    if (sizeFilterValue === 'medium' && (sizeInMB < 1 || sizeInMB > 5)) shouldShow = false;
+                    if (sizeFilterValue === 'large' && sizeInMB <= 5) shouldShow = false;
+                }
+
+                // Date filter
+                if (startDateValue && endDateValue) {
+                    const modelDateObj = new Date(modelDate);
+                    const startObj = new Date(startDateValue);
+                    const endObj = new Date(endDateValue);
+                    if (modelDateObj < startObj || modelDateObj > endObj) shouldShow = false;
+                }
+
+                // Type filter (simulated - you can add actual type data to your models)
+                if (typeFilterValue) {
+                    // This is a placeholder - you would need to add model type data to your Django models
+                    // For now, we'll just show all models
+                }
+
+                if (shouldShow) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
             });
+
+            // Update search info
+            if (searchTerm || sizeFilterValue || startDateValue || endDateValue || typeFilterValue) {
+                searchInfo.style.display = 'flex';
+                resultCount.textContent = visibleCount;
+                
+                // Build search query display
+                let queryParts = [];
+                if (searchTerm) queryParts.push(`"${searchTerm}"`);
+                if (sizeFilterValue) queryParts.push(`Size: ${sizeFilterValue}`);
+                if (startDateValue && endDateValue) queryParts.push(`Date: ${startDateValue} to ${endDateValue}`);
+                if (typeFilterValue) queryParts.push(`Type: ${typeFilterValue}`);
+                
+                searchQuery.textContent = queryParts.length > 0 ? ` for ${queryParts.join(', ')}` : '';
+                
+                // Update active filters tags
+                updateActiveFiltersTags();
+            } else {
+                searchInfo.style.display = 'none';
+            }
+
+            // Apply sorting
+            applySorting(sortBy);
+        }
+
+        // Apply sorting
+        function applySorting(sortBy) {
+            const visibleItems = Array.from(modelItems).filter(item => item.style.display !== 'none');
+            
+            visibleItems.sort((a, b) => {
+                const nameA = a.querySelector('.model-title').textContent.toLowerCase();
+                const nameB = b.querySelector('.model-title').textContent.toLowerCase();
+                
+                switch(sortBy) {
+                    case 'name':
+                        return nameA.localeCompare(nameB);
+                    case 'newest':
+                        return -1;
+                    case 'oldest':
+                        return 1;
+                    case 'size':
+                        const sizeA = parseFloat(a.querySelector('.model-size').textContent.match(/(\d+\.?\d*)/)[1]);
+                        const sizeB = parseFloat(b.querySelector('.model-size').textContent.match(/(\d+\.?\d*)/)[1]);
+                        return sizeB - sizeA;
+                    case 'popularity':
+                        // Simulated popularity - you can add view count data to your models
+                        return Math.random() - 0.5;
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Re-append sorted items
+            const container = document.querySelector('.gallery-grid .row');
+            visibleItems.forEach(item => {
+                container.appendChild(item);
+            });
+        }
+
+        // Update active filters tags
+        function updateActiveFiltersTags() {
+            activeFilters.innerHTML = '';
+            
+            if (searchInput.value) {
+                addFilterTag('Search', searchInput.value, () => {
+                    searchInput.value = '';
+                    applyAllFilters();
+                });
+            }
+            
+            if (sizeFilter.value) {
+                addFilterTag('Size', sizeFilter.value, () => {
+                    sizeFilter.value = '';
+                    applyAllFilters();
+                });
+            }
+            
+            if (typeFilter.value) {
+                addFilterTag('Type', typeFilter.value, () => {
+                    typeFilter.value = '';
+                    applyAllFilters();
+                });
+            }
+        }
+
+        // Add filter tag
+        function addFilterTag(label, value, removeCallback) {
+            const tag = document.createElement('div');
+            tag.className = 'filter-tag';
+            tag.innerHTML = `
+                ${label}: ${value}
+                <span class="remove-tag" onclick="this.parentElement.remove(); ${removeCallback.toString()}()">×</span>
+            `;
+            activeFilters.appendChild(tag);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', applyAllFilters);
+        sortSelect.addEventListener('change', applyAllFilters);
+        sizeFilter.addEventListener('change', applyAllFilters);
+        startDate.addEventListener('change', applyAllFilters);
+        endDate.addEventListener('change', applyAllFilters);
+        typeFilter.addEventListener('change', applyAllFilters);
+        
+        applyFilters.addEventListener('click', applyAllFilters);
+        
+        clearFilters.addEventListener('click', () => {
+            searchInput.value = '';
+            sizeFilter.value = '';
+            startDate.value = '';
+            endDate.value = '';
+            typeFilter.value = '';
+            typeFilter.value = '';
+            applyAllFilters();
+        });
+        
+        clearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            searchInfo.style.display = 'none';
+            applyAllFilters();
+        });
+
+        // Initialize filters
+        initFilters();
+
+        // Batch Processing functionality
+        const batchUploadArea = document.getElementById('batchUploadArea');
+        const batchFiles = document.getElementById('batchFiles');
+        const startBatchBtn = document.getElementById('startBatchBtn');
+        const clearBatchBtn = document.getElementById('clearBatchBtn');
+        let batchFileList = [];
+
+        // Batch file handling
+        batchUploadArea.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = 'image/*';
+            input.onchange = handleBatchFiles;
+            input.click();
+        });
+
+        batchUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            batchUploadArea.classList.add('dragover');
+        });
+
+        batchUploadArea.addEventListener('dragleave', () => {
+            batchUploadArea.classList.remove('dragover');
+        });
+
+        batchUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            batchUploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleBatchFiles({ target: { files } });
+        });
+
+        function handleBatchFiles(e) {
+            const files = Array.from(e.target.files);
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (batchFileList.length + imageFiles.length > 10) {
+                alert('Maximum 10 images allowed for batch processing');
+                return;
+            }
+            
+            imageFiles.forEach(file => {
+                if (!batchFileList.find(f => f.name === file.name)) {
+                    batchFileList.push(file);
+                }
+            });
+            
+            updateBatchFilesDisplay();
+        }
+
+        function updateBatchFilesDisplay() {
+            batchFiles.innerHTML = '';
+            
+            batchFileList.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'batch-file-item';
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileItem.innerHTML = `
+                        <img src="${e.target.result}" class="batch-file-preview" alt="${file.name}">
+                        <div class="batch-file-name">${file.name}</div>
+                        <div class="batch-file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                        <div class="batch-file-status status-pending">Pending</div>
+                        <button class="batch-file-remove" onclick="removeBatchFile(${index})">×</button>
+                    `;
+                };
+                reader.readAsDataURL(file);
+                
+                batchFiles.appendChild(fileItem);
+            });
+            
+            startBatchBtn.disabled = batchFileList.length === 0;
+        }
+
+        function removeBatchFile(index) {
+            batchFileList.splice(index, 1);
+            updateBatchFilesDisplay();
+        }
+
+        startBatchBtn.addEventListener('click', () => {
+            if (batchFileList.length === 0) return;
+            
+            // Simulate batch processing
+            batchFileList.forEach((file, index) => {
+                setTimeout(() => {
+                    const fileItem = batchFiles.children[index];
+                    const status = fileItem.querySelector('.batch-file-status');
+                    status.textContent = 'Processing';
+                    status.className = 'batch-file-status status-processing';
+                }, index * 1000);
+                
+                setTimeout(() => {
+                    const fileItem = batchFiles.children[index];
+                    const status = fileItem.querySelector('.batch-file-status');
+                    status.textContent = 'Completed';
+                    status.className = 'batch-file-status status-completed';
+                }, (index + 3) * 1000);
+            });
+            
+            startBatchBtn.disabled = true;
+            startBatchBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+            
+            setTimeout(() => {
+                startBatchBtn.disabled = false;
+                startBatchBtn.innerHTML = '<i class="fas fa-play me-2"></i>Start Processing';
+            }, (batchFileList.length + 3) * 1000);
+        });
+
+        clearBatchBtn.addEventListener('click', () => {
+            batchFileList = [];
+            updateBatchFilesDisplay();
+        });
+
+        // Comparison Mode functionality
+        const enterComparisonBtn = document.getElementById('enterComparisonBtn');
+        const exitComparisonBtn = document.getElementById('exitComparisonBtn');
+        const comparisonMode = document.getElementById('comparisonMode');
+        const modelSelection = document.getElementById('modelSelection');
+        const selectionGrid = document.getElementById('selectionGrid');
+        const comparisonGrid = document.getElementById('comparisonGrid');
+        const comparisonActions = document.getElementById('comparisonActions');
+        const compareModelsBtn = document.getElementById('compareModelsBtn');
+        const exportComparisonBtn = document.getElementById('exportComparisonBtn');
+
+        let selectedModels = [];
+        let comparisonData = {};
+
+        enterComparisonBtn.addEventListener('click', () => {
+            comparisonMode.classList.add('show');
+            populateModelSelection();
+        });
+
+        exitComparisonBtn.addEventListener('click', () => {
+            comparisonMode.classList.remove('show');
+            selectedModels = [];
+            comparisonData = {};
+            resetComparisonUI();
+        });
+
+        function populateModelSelection() {
+            selectionGrid.innerHTML = '';
+            
+            modelItems.forEach((item, index) => {
+                const modelName = item.querySelector('.model-title').textContent;
+                const modelImage = item.querySelector('img').src;
+                const modelSize = item.querySelector('.model-size').textContent;
+                const modelDate = item.querySelector('.model-details .model-detail-item:nth-child(2) span').textContent;
+                
+                const selectionItem = document.createElement('div');
+                selectionItem.className = 'selection-item';
+                selectionItem.innerHTML = `
+                    <img src="${modelImage}" alt="${modelName}">
+                    <div class="selection-item-name">${modelName}</div>
+                `;
+                
+                selectionItem.addEventListener('click', () => {
+                    if (selectedModels.length < 2) {
+                        selectionItem.classList.toggle('selected');
+                        
+                        if (selectionItem.classList.contains('selected')) {
+                            selectedModels.push({
+                                index,
+                                name: modelName,
+                                image: modelImage,
+                                size: modelSize,
+                                date: modelDate
+                            });
+                        } else {
+                            selectedModels = selectedModels.filter(m => m.index !== index);
+                        }
+                        
+                        if (selectedModels.length === 2) {
+                            showComparisonActions();
+                        } else {
+                            hideComparisonActions();
+                        }
+                    } else if (selectionItem.classList.contains('selected')) {
+                        selectionItem.classList.remove('selected');
+                        selectedModels = selectedModels.filter(m => m.index !== index);
+                        hideComparisonActions();
+                    }
+                });
+                
+                selectionGrid.appendChild(selectionItem);
+            });
+        }
+
+        function showComparisonActions() {
+            comparisonActions.style.display = 'flex';
+        }
+
+        function hideComparisonActions() {
+            comparisonActions.style.display = 'none';
+        }
+
+        compareModelsBtn.addEventListener('click', () => {
+            if (selectedModels.length !== 2) return;
+            
+            modelSelection.style.display = 'none';
+            comparisonGrid.style.display = 'grid';
+            comparisonActions.style.display = 'flex';
+            
+            // Populate comparison data
+            selectedModels.forEach((model, index) => {
+                const itemId = `comparisonItem${index + 1}`;
+                const titleId = `comparisonTitle${index + 1}`;
+                const subtitleId = `comparisonSubtitle${index + 1}`;
+                const imageId = `comparisonImage${index + 1}`;
+                const detailsId = `comparisonDetails${index + 1}`;
+                
+                document.getElementById(titleId).textContent = model.name;
+                document.getElementById(subtitleId).textContent = `Uploaded on ${model.date}`;
+                
+                const imageContainer = document.getElementById(imageId);
+                imageContainer.innerHTML = `<img src="${model.image}" class="comparison-item-image" alt="${model.name}">`;
+                
+                const detailsContainer = document.getElementById(detailsId);
+                detailsContainer.innerHTML = `
+                    <div class="comparison-detail-item">
+                        <span class="comparison-detail-label">File Size:</span>
+                        <span class="comparison-detail-value">${model.size}</span>
+                    </div>
+                    <div class="comparison-detail-item">
+                        <span class="comparison-detail-label">Vertices:</span>
+                        <span class="comparison-detail-value">~15,420</span>
+                    </div>
+                    <div class="comparison-detail-item">
+                        <span class="comparison-detail-label">Created:</span>
+                        <span class="comparison-detail-value">${model.date}</span>
+                    </div>
+                `;
+            });
+        });
+
+        exportComparisonBtn.addEventListener('click', () => {
+            // Simulate export functionality
+            alert('Comparison exported successfully! This feature would generate a detailed comparison report.');
+        });
+
+        function resetComparisonUI() {
+            modelSelection.style.display = 'block';
+            comparisonGrid.style.display = 'none';
+            comparisonActions.style.display = 'none';
+            
+            // Reset selection items
+            document.querySelectorAll('.selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all model cards
+        modelItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(item);
         });
     </script>
 </body>

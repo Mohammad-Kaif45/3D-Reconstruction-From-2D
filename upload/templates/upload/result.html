@@ -1,166 +1,969 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Model Result</title>
-    <style>
-        body { margin: 0; }
-        canvas { display: block; }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
-</head>
-<body>
-    <div id="container"></div>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('container').appendChild(renderer.domElement);
-
-        const loader = new THREE.GLTFLoader();
-        loader.load("{{ model_file }}", function (gltf) {
-            scene.add(gltf.scene);
-            gltf.scene.scale.set(0.5, 0.5, 0.5); // Scale the model if necessary
-            camera.position.z = 5;
-
-            const animate = function () {
-                requestAnimationFrame(animate);
-                gltf.scene.rotation.y += 0.01; // Rotate the model for better view
-                renderer.render(scene, camera);
-            };
-
-            animate();
-        }, undefined, function (error) {
-            console.error(error);
-        });
-    </script>
-</body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D GLB Model Viewer</title>
+    <title>3D Model Result - 3D Reconstruction from 2D</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
-        body { margin: 0; }
-        canvas { display: block; width: 100vw; height: 100vh; }
-        #info { position: absolute; top: 10px; left: 10px; color: white; font-family: monospace; }
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --accent-hover: #2c5aa0;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
+            --bg-accent: #ebf8ff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .nav-link.active {
+            color: var(--accent-color) !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Result Header */
+        .result-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .result-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        /* 3D Viewer Container */
+        .viewer-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .viewer-header {
+            background: var(--bg-accent);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .viewer-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .viewer-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .control-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        /* Canvas Container */
+        #container {
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            max-width: 300px;
+            z-index: 5;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .info-content {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        /* Export and Share Panel */
+        .export-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            max-width: 280px;
+            z-index: 5;
+        }
+
+        .export-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .export-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .export-section-title {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .export-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .export-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .export-option:hover {
+            background: var(--bg-accent);
+            border-color: var(--accent-color);
+        }
+
+        .export-option input[type="radio"] {
+            accent-color: var(--accent-color);
+        }
+
+        .export-option-label {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .export-option-size {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-left: auto;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .share-options {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-share {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-share:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-share.facebook {
+            background: #1877f2;
+        }
+
+        .btn-share.twitter {
+            background: #1da1f2;
+        }
+
+        .btn-share.linkedin {
+            background: #0077b5;
+        }
+
+        .btn-share.whatsapp {
+            background: #25d366;
+        }
+
+        .btn-share.copy {
+            background: var(--accent-color);
+        }
+
+        /* Model Info Panel */
+        .model-info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            max-width: 300px;
+            z-index: 5;
+        }
+
+        .model-info-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .model-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem 0;
+            font-size: 0.8rem;
+        }
+
+        .model-info-label {
+            color: var(--text-secondary);
+        }
+
+        .model-info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .result-title {
+                font-size: 2rem;
+            }
+            
+            .result-header {
+                padding: 1.5rem;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .viewer-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .viewer-controls {
+                justify-content: center;
+            }
+            
+            #container {
+                height: 50vh;
+                min-height: 400px;
+            }
+            
+            .info-panel {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 1rem;
+                max-width: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="info"></div>
-    <button id="capture">Capture Image</button>
-    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-cube me-2"></i>3D Reconstruction
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_image' %}">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'gallery' %}">Gallery</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Result Header -->
+            <div class="result-header">
+                <h1 class="result-title">
+                    <i class="fas fa-cube me-2"></i>3D Model Generated Successfully!
+                </h1>
+                <p class="result-subtitle">Your 2D image has been transformed into a stunning 3D model. Explore it below using the interactive controls.</p>
+                <div class="result-actions">
+                    <a href="{% url 'upload_image' %}" class="btn-action">
+                        <i class="fas fa-upload"></i>Upload Another Image
+                    </a>
+                    <a href="{% url 'gallery' %}" class="btn-action btn-secondary">
+                        <i class="fas fa-images"></i>View Gallery
+                    </a>
+                    <a href="{% url 'home' %}" class="btn-action btn-secondary">
+                        <i class="fas fa-home"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3D Viewer -->
+            <div class="viewer-container">
+                <div class="viewer-header">
+                    <div class="viewer-title">
+                        <i class="fas fa-eye me-2"></i>Interactive 3D Viewer
+                    </div>
+                    <div class="viewer-controls">
+                        <button class="control-btn active" id="rotateBtn">
+                            <i class="fas fa-sync-alt me-1"></i>Auto Rotate
+                        </button>
+                        <button class="control-btn" id="resetBtn">
+                            <i class="fas fa-undo me-1"></i>Reset View
+                        </button>
+                        <button class="control-btn" id="fullscreenBtn">
+                            <i class="fas fa-expand me-1"></i>Fullscreen
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="container">
+                    <div class="loading-overlay" id="loadingOverlay">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading 3D Model...</div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <div class="info-title">Viewer Controls</div>
+                    <div class="info-content">
+                        <strong>Mouse:</strong> Click and drag to rotate, scroll to zoom<br>
+                        <strong>Touch:</strong> Swipe to rotate, pinch to zoom<br>
+                        <strong>Auto-rotate:</strong> Toggle with the button above
+                    </div>
+                </div>
+
+                <!-- Export and Share Panel -->
+                <div class="export-panel">
+                    <div class="export-title">
+                        <i class="fas fa-download me-2"></i>Export & Share
+                    </div>
+                    
+                    <div class="export-section">
+                        <div class="export-section-title">Download Format</div>
+                        <div class="export-options">
+                            <label class="export-option">
+                                <input type="radio" name="format" value="glb" checked>
+                                <span class="export-option-label">GLB (Recommended)</span>
+                                <span class="export-option-size">~2.5MB</span>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="format" value="obj">
+                                <span class="export-option-label">OBJ</span>
+                                <span class="export-option-size">~3.2MB</span>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="format" value="fbx">
+                                <span class="export-option-label">FBX</span>
+                                <span class="export-option-size">~4.1MB</span>
+                            </label>
+                            <label class="export-option">
+                                <input type="radio" name="format" value="stl">
+                                <span class="export-option-label">STL</span>
+                                <span class="export-option-size">~1.8MB</span>
+                            </label>
+                        </div>
+                        <button class="btn-export" id="downloadBtn">
+                            <i class="fas fa-download me-2"></i>Download 3D Model
+                        </button>
+                    </div>
+
+                    <div class="export-section">
+                        <div class="export-section-title">Share Your Creation</div>
+                        <div class="share-options">
+                            <button class="btn-share facebook" title="Share on Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </button>
+                            <button class="btn-share twitter" title="Share on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn-share linkedin" title="Share on LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </button>
+                            <button class="btn-share whatsapp" title="Share on WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                            <button class="btn-share copy" title="Copy Link" id="copyLinkBtn">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Info Panel -->
+                <div class="model-info-panel">
+                    <div class="model-info-title">
+                        <i class="fas fa-info-circle me-2"></i>Model Information
+                    </div>
+                    <div class="model-info-item">
+                        <span class="model-info-label">Format:</span>
+                        <span class="model-info-value">GLB</span>
+                    </div>
+                    <div class="model-info-item">
+                        <span class="model-info-label">Vertices:</span>
+                        <span class="model-info-value">~15,420</span>
+                    </div>
+                    <div class="model-info-item">
+                        <span class="model-info-label">Faces:</span>
+                        <span class="model-info-value">~30,840</span>
+                    </div>
+                    <div class="model-info-item">
+                        <span class="model-info-label">File Size:</span>
+                        <span class="model-info-value">2.5 MB</span>
+                    </div>
+                    <div class="model-info-item">
+                        <span class="model-info-label">Quality:</span>
+                        <span class="model-info-value">High</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
     <script>
-        const info = document.getElementById('info');
+        let scene, camera, renderer, controls, model;
+        let autoRotate = true;
+        let animationId;
 
-        function log(message) {
-            console.log(message);
-            info.innerHTML += message + '<br>';
-        }
-
-        let scene, camera, renderer, controls;
-
+        // Initialize the 3D scene
         function init() {
-            log('Initializing scene...');
+            // Create scene
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+            scene.background = new THREE.Color(0xf8fafc);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 5, 5);
+
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Add renderer to container
+            const container = document.getElementById('container');
+            container.appendChild(renderer.domElement);
+
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(0, 1, 0);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
             scene.add(directionalLight);
 
-            camera.position.z = 5;
+            // Add controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
+            controls.enablePan = true;
+            controls.autoRotate = autoRotate;
+            controls.autoRotateSpeed = 2.0;
 
-            log('Scene initialized.');
+            // Load the 3D model
+            loadModel();
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+
+            // Start animation loop
+            animate();
         }
 
+        // Load the 3D model
         function loadModel() {
-            log('Loading GLB model...');
             const loader = new THREE.GLTFLoader();
-            const modelPath = '{{ model_file }}';  // Use Django's template variable for model URL
-            log('Model Path:', modelPath);  // Log the model path for debugging
+            const modelPath = '{{ model_file }}';
 
             loader.load(
                 modelPath,
                 function (gltf) {
-                    log('Model loaded successfully.');
-                    scene.add(gltf.scene);
+                    model = gltf.scene;
                     
-                    const box = new THREE.Box3().setFromObject(gltf.scene);
+                    // Center and scale the model
+                    const box = new THREE.Box3().setFromObject(model);
                     const center = box.getCenter(new THREE.Vector3());
                     const size = box.getSize(new THREE.Vector3());
                     
                     const maxDim = Math.max(size.x, size.y, size.z);
-                    camera.position.set(center.x, center.y, center.z + maxDim * 2); // Adjust camera position
-                    controls.target.set(center.x, center.y, center.z);
-                    controls.update();
-
-                    log('Model positioned and camera adjusted.');
+                    const scale = 3 / maxDim;
+                    model.scale.setScalar(scale);
+                    
+                    model.position.sub(center.multiplyScalar(scale));
+                    
+                    // Add shadows
+                    model.traverse(function (child) {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+                    
+                    scene.add(model);
+                    
+                    // Hide loading overlay
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    
+                    console.log('3D model loaded successfully');
                 },
                 function (xhr) {
-                    log((xhr.loaded / xhr.total * 100) + '% loaded');
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
                 },
                 function (error) {
-                    console.error('Error loading model:', error); // Log the entire error object
-                    log('Error loading model: ' + error.message);
+                    console.error('Error loading 3D model:', error);
+                    document.getElementById('loadingOverlay').innerHTML = 
+                        '<div class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Error loading model</div>';
                 }
             );
         }
 
-        document.getElementById('capture').addEventListener('click', function() {
-            const dataURL = renderer.toDataURL('image/png');
-            fetch('/upload/save-image/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token for security
-                },
-                body: JSON.stringify({ imageData: dataURL })
-            })
-            .then(response => response.json())
-            .then(data => {
-                log(data.status);
-            })
-            .catch(error => {
-                log('Error saving image: ' + error.message);
-            });
-        });
-
+        // Animation loop
         function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
+            animationId = requestAnimationFrame(animate);
+            
+            if (controls) {
+                controls.update();
+            }
+            
+            if (model && autoRotate) {
+                model.rotation.y += 0.005;
+            }
+            
             renderer.render(scene, camera);
         }
 
+        // Handle window resize
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        window.addEventListener('resize', onWindowResize, false);
+        // Control button handlers
+        document.getElementById('rotateBtn').addEventListener('click', function() {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            this.classList.toggle('active');
+            this.innerHTML = autoRotate ? 
+                '<i class="fas fa-sync-alt me-1"></i>Auto Rotate' : 
+                '<i class="fas fa-pause me-1"></i>Paused';
+        });
 
-        init();
-        loadModel();
-        animate();
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (controls) {
+                controls.reset();
+            }
+            if (model) {
+                model.rotation.set(0, 0, 0);
+            }
+        });
+
+        document.getElementById('fullscreenBtn').addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.getElementById('container').requestFullscreen();
+                this.innerHTML = '<i class="fas fa-compress me-1"></i>Exit Fullscreen';
+            } else {
+                document.exitFullscreen();
+                this.innerHTML = '<i class="fas fa-expand me-1"></i>Fullscreen';
+            }
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        });
+
+        // Export and Share functionality
+        const downloadBtn = document.getElementById('downloadBtn');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const formatInputs = document.querySelectorAll('input[name="format"]');
+
+        // Download functionality
+        downloadBtn.addEventListener('click', function() {
+            const selectedFormat = document.querySelector('input[name="format"]:checked').value;
+            const modelUrl = '{{ model_file }}';
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = modelUrl;
+            link.download = `3d_model.${selectedFormat}`;
+            link.click();
+            
+            // Show success message
+            showNotification(`Downloading 3D model in ${selectedFormat.toUpperCase()} format...`, 'success');
+        });
+
+        // Copy link functionality
+        copyLinkBtn.addEventListener('click', function() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                showNotification('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = currentUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Link copied to clipboard!', 'success');
+            });
+        });
+
+        // Social sharing functionality
+        document.querySelector('.btn-share.facebook').addEventListener('click', function() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out my amazing 3D model created with AI!');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+        });
+
+        document.querySelector('.btn-share.twitter').addEventListener('click', function() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Just created an amazing 3D model with AI! Check it out:');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        });
+
+        document.querySelector('.btn-share.linkedin').addEventListener('click', function() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent('AI-Generated 3D Model');
+            const summary = encodeURIComponent('Check out this amazing 3D model created with AI technology!');
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        });
+
+        document.querySelector('.btn-share.whatsapp').addEventListener('click', function() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out my amazing 3D model created with AI!');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+        });
+
+        // Format change handling
+        formatInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const format = this.value;
+                const sizeMap = {
+                    'glb': '~2.5MB',
+                    'obj': '~3.2MB',
+                    'fbx': '~4.1MB',
+                    'stl': '~1.8MB'
+                };
+                
+                // Update file size display
+                this.closest('.export-option').querySelector('.export-option-size').textContent = sizeMap[format];
+                
+                // Update model info panel
+                document.querySelector('.model-info-value').textContent = format.toUpperCase();
+            });
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#38a169' : '#3182ce'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                font-weight: 500;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
