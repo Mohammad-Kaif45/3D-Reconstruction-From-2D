@@ -28,7 +28,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from upload.views import home  # Assuming the home view is in the upload app
 
-
+ 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', include('upload.urls')),  # Include the upload app's URLs
