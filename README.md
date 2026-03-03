@@ -2,7 +2,7 @@
 
 This project is a full-stack web application that allows users to upload a 2D image and visualize its reconstructed 3D model.
 The system uses AI-based reconstruction algorithms via Stable Fast API to convert 2D images into 3D, and provides a smooth user experience with features like history tracking, gallery view, and user authentication.
- 
+  
 🚀 Features
 🔹 1. 2D → 3D Image Reconstruction
 
@@ -147,6 +147,7 @@ This project is licensed under the MIT License.
 ![Login](https://github.com/user-attachments/assets/350d4b52-dc76-4b71-963d-18003453d95d)
 ![SignUp](https://github.com/user-attachments/assets/79ec086d-86ae-4054-a457-9d5f8f684905)
 ![Upload](https://github.com/user-attachments/assets/43f29045-b57f-4f6f-a01c-cfeadda16734)
+
 
 
 
