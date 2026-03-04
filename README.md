@@ -22,7 +22,7 @@ Secure user management using Django with SQL Database.
 
 Each user can view their past 3D conversions.
 
-Stored in the SQL database.
+Stored in the SQL database. 
 
 🔹 4. Gallery Section
 
@@ -147,6 +147,7 @@ This project is licensed under the MIT License.
 ![Login](https://github.com/user-attachments/assets/350d4b52-dc76-4b71-963d-18003453d95d)
 ![SignUp](https://github.com/user-attachments/assets/79ec086d-86ae-4054-a457-9d5f8f684905)
 ![Upload](https://github.com/user-attachments/assets/43f29045-b57f-4f6f-a01c-cfeadda16734)
+
 
 
 
